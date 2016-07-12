@@ -10,7 +10,7 @@ class Paper
   end
 
   def in_position?(pos_x, pos_y)
-    (x <= pos_x && pos_x <= x + width) &&\
-     (y <= pos_y && pos_y <= y + height)
+    (x <= pos_x && pos_x <= x + width - 1) &&\
+     (y <= pos_y && pos_y <= y + height - 1)
   end
 end

@@ -1,6 +1,6 @@
 require 'rspec'
-require '../canvas'
-require '../paper'
+require_relative '../canvas'
+require_relative '../paper'
 
 RSpec.describe :canvas do
   context 'with small canvas and small paper' do
