@@ -1,52 +1,68 @@
 class Canvas
-  attr_accessor :width, :height, :papers
+  attr_accessor :width, :height
 
   def initialize(width, height)
     self.width = width
     self.height = height
-    self.papers = []
-
     @color = 0
     @areas = {}
+
+    init_blank_canvas
   end
 
-  def print
+  def add_paper(color, x, y, width, height)
+    start_y = y
+    end_y = y + height
+    start_x = x
+    end_x = x + width
+
+    (start_y...end_y).each do |row|
+      (start_x...end_x).each do |column|
+        old_color = @canvas[row][column]
+        update_area_color(color, old_color)
+        @canvas[row][column] = color
+      end
+    end
+  end
+
+  def draw
     puts 'Drawing canvas ...'
     height.times do |row|
-      row_s = ''
-
       width.times do |column|
-        row_s << find_color(column, row).to_s
+        print @canvas[row][column]
       end
 
-      p row_s
+      # print new line after the row
+      puts
     end
   end
 
   def areas
-    puts 'Calculating areas ...'
-    height.times do |row|
-      width.times do |column|
-        increment_area(find_color(column, row))
-      end
-    end
-
     @areas
   end
 
   private
 
-  def find_color(column, row)
-    paper = papers.select { |p| p.in_position?(column, row) }.last
-
-    paper.nil? ? @color : paper.color
-  end
-
-  def increment_area(color)
-    if @areas[color].nil?
-      @areas[color] = 0
+  def init_blank_canvas
+    @canvas = Array.new(height) do
+      Array.new(width) do
+        @color
+      end
     end
 
-    @areas[color] += 1
+    # init areas and canvas color area
+    @areas[0] = width * height
+  end
+
+  def update_area_color(new_color, old_color)
+    if @areas[new_color].nil?
+      @areas[new_color] = 0
+    end
+
+    @areas[new_color] += 1
+
+    if @areas[old_color] && @areas[old_color] > 0
+      @areas[old_color] -= 1
+    end
   end
 end
